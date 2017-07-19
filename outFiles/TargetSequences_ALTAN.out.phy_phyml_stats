@@ -10,24 +10,24 @@
 . Tree topology search : 		NNIs
 . Initial tree: 			BioNJ
 . Model of amino acids substitution: 	JTT
-. Number of taxa: 			17
-. Log-likelihood: 			-814.69660
-. Unconstrained likelihood: 		-538.24516
-. Parsimony: 				60
-. Tree size: 				0.42289
+. Number of taxa: 			228
+. Log-likelihood: 			-89794.44409
+. Unconstrained likelihood: 		-5141.38905
+. Parsimony: 				17529
+. Tree size: 				51.48821
 . Discrete gamma model: 		Yes
   - Number of classes: 			4
-  - Gamma shape parameter: 		0.639
-  - Relative rate in class 1: 		0.06116 [freq=0.250000] 		
-  - Relative rate in class 2: 		0.33306 [freq=0.250000] 		
-  - Relative rate in class 3: 		0.89981 [freq=0.250000] 		
-  - Relative rate in class 4: 		2.70597 [freq=0.250000] 		
+  - Gamma shape parameter: 		2.181
+  - Relative rate in class 1: 		0.31395 [freq=0.250000] 		
+  - Relative rate in class 2: 		0.67297 [freq=0.250000] 		
+  - Relative rate in class 3: 		1.07392 [freq=0.250000] 		
+  - Relative rate in class 4: 		1.93916 [freq=0.250000] 		
 
 . Run ID:				none
-. Random seed:				1500388240
+. Random seed:				1500470712
 . Subtree patterns aliasing:		no
 . Version:				20160207
-. Time used:				0h0m7s (7 seconds)
+. Time used:				0h21m3s (1263 seconds)
 
  oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
  Suggested citations:

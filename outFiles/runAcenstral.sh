@@ -1,12 +1,23 @@
 #!/bin/bash
 
+# Predict ancestral genes
+# Author: Jitendra Narayan
+# USAGE: ./runAncestral.sh
+
 #Script location
 scriptLoc=/home/jitendra/Desktop/testAncestralReco/scriptBase
-inputLoc=/home/jitendra/Desktop/testAncestralReco/inputFile
+inputLoc=/home/jitendra/Desktop/testAncestralReco/inFile
 #Alignment preparation.
 #Make a multiple alignment, either with Mafft-L-INS-i or Clustal-Omega:
 #mafft-linsi $inputLoc/TargetSequences_ALTAN.txt > TargetSequences_ALTAN.out.fasta
 
+#Remove the directory if it's present, otherwise do nothing.
+rm -rf outFiles ?
+
+#remove special charater frim file
+sed 's,|,_,g' -i $inputLoc/TargetSequences_ALTAN.txt #fasta #header #sed
+
+#Alignment of all sequences
 clustalo --in $inputLoc/TargetSequences_ALTAN.txt --out TargetSequences_ALTAN.out.fasta
 
 #To view in jalview
@@ -59,13 +70,16 @@ codeml control_file_ALTAN.ctl
 python $scriptLoc/parse_rst.py rst > ancestral_sequences.fasta
 
 #Compute physico-chemical properties on ancestral sequences.
-python $scriptLoc/compute_pI.py $inputLoc/TargetSequences_ALTAN.txt
-python $scriptLoc/compute_pI.py ancestral_sequences.fasta
+#python $scriptLoc/compute_pI.py $inputLoc/TargetSequences_ALTAN.txt
+#python $scriptLoc/compute_pI.py ancestral_sequences.fasta
 
 #Map properties on tree.
-python $scriptLoc/map_on_tree.py ancestral_sequences.fasta TargetSequences_ALTAN.out.tree >  TargetSequences_ALTAN.out_annotated_pI.tree 
+#python $scriptLoc/map_on_tree.py ancestral_sequences.fasta TargetSequences_ALTAN.out.tree >  TargetSequences_ALTAN.out_annotated_pI.tree
 
 mkdir outFiles
 find . -maxdepth 1 \( ! -type d \) -exec sh -c 'mv  "$@" outFiles' _ {} \;
 
 cp outFiles/*.ctl outFiles/*.sh .
+
+
+#You can estimating the stability effect of a mutation with FoldX

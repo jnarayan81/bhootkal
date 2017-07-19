@@ -11,7 +11,7 @@ while 1:
         break
     line= line.rstrip()    # Remove end-of-line
     if line[0:4] == "node":
-        tab = line.split("          ")
+        tab = line.split("         ")
         print ">"+tab[0].replace(" ","").replace("#","")
         print tab[1].replace(" ","")
 file_in.close()
