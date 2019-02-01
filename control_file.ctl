@@ -1,6 +1,6 @@
-seqfile = TargetSequences_ALTAN.out.phy    * sequence data filename
-treefile = TargetSequences_ALTAN.out.tree   * tree structure file name
-outfile = TargetSequences_ALTAN.out.mlc    * main result file name
+seqfile = TargetSequences.out.phy    * sequence data filename
+treefile = TargetSequences.out.tree   * tree structure file name
+outfile = TargetSequences.out.mlc    * main result file name
 
 noisy = 9  * 0,1,2,3,9: how much rubbish on the screen
 verbose = 2  * 0: concise; 1: detailed, 2: too much

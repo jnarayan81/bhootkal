@@ -5,29 +5,29 @@
                          Copyright CNRS - Universite Montpellier II                                 
  oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
-. Sequence filename: 			TargetSequences_ALTAN.out.phy
+. Sequence filename: 			TargetSequences.out.phy
 . Data set: 				#1
 . Tree topology search : 		NNIs
 . Initial tree: 			BioNJ
 . Model of amino acids substitution: 	JTT
-. Number of taxa: 			228
-. Log-likelihood: 			-89794.44409
-. Unconstrained likelihood: 		-5141.38905
-. Parsimony: 				17529
-. Tree size: 				51.48821
+. Number of taxa: 			10
+. Log-likelihood: 			-9206.99512
+. Unconstrained likelihood: 		-3644.35086
+. Parsimony: 				1743
+. Tree size: 				7.45504
 . Discrete gamma model: 		Yes
   - Number of classes: 			4
-  - Gamma shape parameter: 		2.181
-  - Relative rate in class 1: 		0.31395 [freq=0.250000] 		
-  - Relative rate in class 2: 		0.67297 [freq=0.250000] 		
-  - Relative rate in class 3: 		1.07392 [freq=0.250000] 		
-  - Relative rate in class 4: 		1.93916 [freq=0.250000] 		
+  - Gamma shape parameter: 		2.280
+  - Relative rate in class 1: 		0.32456 [freq=0.250000] 		
+  - Relative rate in class 2: 		0.68183 [freq=0.250000] 		
+  - Relative rate in class 3: 		1.07564 [freq=0.250000] 		
+  - Relative rate in class 4: 		1.91797 [freq=0.250000] 		
 
 . Run ID:				none
-. Random seed:				1500470712
+. Random seed:				1549050317
 . Subtree patterns aliasing:		no
 . Version:				20160207
-. Time used:				0h21m3s (1263 seconds)
+. Time used:				0h0m9s (9 seconds)
 
  oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
  Suggested citations:
