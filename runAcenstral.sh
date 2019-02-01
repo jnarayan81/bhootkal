@@ -1,29 +1,32 @@
 #!/bin/bash
 
-# Predict ancestral genes
+# Predict ancestral gene/protein
 # Author: Jitendra Narayan
-# USAGE: ./runAncestral.sh
+# USAGE: ./bhootkal.sh
 
-#Script location
+#Perl and Python script location
+#inFile should contain all fasta sequences - named "TargetSequences_ALTAN.txt"
 scriptLoc=/home/jitendra/Desktop/testAncestralReco/scriptBase
 inputLoc=/home/jitendra/Desktop/testAncestralReco/inFile
-#Alignment preparation.
+
+#Sequence alignment preparation.
 #Make a multiple alignment, either with Mafft-L-INS-i or Clustal-Omega:
 #mafft-linsi $inputLoc/TargetSequences_ALTAN.txt > TargetSequences_ALTAN.out.fasta
 
 #Remove the directory if it's present, otherwise do nothing.
 rm -rf outFiles ?
 
-#remove special charater frim file
+#remove special charater from file
 sed 's,|,_,g' -i $inputLoc/TargetSequences_ALTAN.txt #fasta #header #sed
 
-#Alignment of all sequences
+#Multiple alignment of all sequences
 clustalo --in $inputLoc/TargetSequences_ALTAN.txt --out TargetSequences_ALTAN.out.fasta
 
-#To view in jalview
+#View the alignments in jalview
 #jalview TargetSequences_ALTAN.out.fasta
 
-#The format of the resulting alignment is FASTA. However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP.
+#The format of the resulting alignment is FASTA. 
+#However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP format.
 python $scriptLoc/convert_fasta2phylip.py TargetSequences_ALTAN.out.fasta TargetSequences_ALTAN.out.phy
 
 #generate a tree, either with PhyML (one of the most accurate tool) or FastTree (very fast and pretty accurate):
