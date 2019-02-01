@@ -10,5 +10,7 @@ bhoot-kal (hindi:भूत-काल; english:preterite; french: le passé simpl
 #-codeml
 
 ### Run
-  ' ./bhootkal.sh '
+  '''
+  ./bhootkal.sh
+  '''
 
