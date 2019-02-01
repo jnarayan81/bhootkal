@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Predict ancestral gene/protein
-# Author: Jitendra Narayan
+# Predict ancestral gene/protein # Author: Jitendra Narayan
 # USAGE: ./bhootkal.sh
+
+# Following pre-installed software and tools need to be in yout path
+#-Python2 #Perl5
+#-clustalo -for mutiple alingments 
+#-phyml
+#-codeml
 
 #Perl and Python script location
 #inFile should contain all fasta sequences - named "TargetSequences_ALTAN.txt"
