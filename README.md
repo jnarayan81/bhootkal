@@ -1,2 +1,2 @@
-# Bhootkal
-Ancestral Genes Prediction
+# bhootkal
+Ancestral Gene/Protein Prediction
