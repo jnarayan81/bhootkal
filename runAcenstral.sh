@@ -10,35 +10,47 @@
 #-codeml
 
 #Perl and Python script location
-#inFile should contain all fasta sequences - named "TargetSequences_ALTAN.txt"
-scriptLoc=/home/jitendra/Desktop/testAncestralReco/scriptBase
-inputLoc=/home/jitendra/Desktop/testAncestralReco/inFile
+#inFile should contain all fasta sequences
+#scriptLoc=/home/jitendra/Desktop/testAncestralReco/scriptBase
+#inputLoc=/home/jitendra/Desktop/testAncestralReco/inFile
+
+# location to getopts.sh file
+source scriptBase/getopt.sh
+USAGE="-o OUT -d DIR -f FASTA -c CTRL -j JONES[ -a START_DATE_TIME ]"
+parse_options "${USAGE}" ${@}
 
 #Sequence alignment preparation.
 #Make a multiple alignment, either with Mafft-L-INS-i or Clustal-Omega:
-#mafft-linsi $inputLoc/TargetSequences_ALTAN.txt > TargetSequences_ALTAN.out.fasta
+#You can opt any other you like, but keep an eye on formating
+#mafft-linsi ${DIR}/${FASTA} > TargetSequences.out.fasta
 
 #Remove the directory if it's present, otherwise do nothing.
-rm -rf outFiles ?
+rm -rf ${OUT} ?
 
 #remove special charater from file
-sed 's,|,_,g' -i $inputLoc/TargetSequences_ALTAN.txt #fasta #header #sed
+#mostly needed when you have your own formated sequences
+sed 's,|,_,g' -i ${DIR}/${FASTA} #fasta #header #sed
 
 #Multiple alignment of all sequences
-clustalo --in $inputLoc/TargetSequences_ALTAN.txt --out TargetSequences_ALTAN.out.fasta
+#Here I prefer clastal omega for alingments - because it is installed by default in my Os
+clustalo --in ${DIR}/${FASTA} --out TargetSequences.out.fasta
 
-#View the alignments in jalview
-#jalview TargetSequences_ALTAN.out.fasta
+#It is always recommended to check by eye, To view the alignments in jalview
+#jalview TargetSequences.out.fasta
 
-#The format of the resulting alignment is FASTA. 
-#However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP format.
-python $scriptLoc/convert_fasta2phylip.py TargetSequences_ALTAN.out.fasta TargetSequences_ALTAN.out.phy
+#Formating is a mess, why not one format. We need to format the out file for next run.
+#The format of the resulting alignment is FASTA. However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP format.
+#Script adapted from online source @
+python scriptBase/convert_fasta2phylip.py TargetSequences.out.fasta TargetSequences.out.phy
 
+#As I say, it is upto you to choose
 #generate a tree, either with PhyML (one of the most accurate tool) or FastTree (very fast and pretty accurate):
-#FastTree -nosupport TargetSequences_ALTAN.out.phy > TargetSequences_ALTAN.out.tree
+#FastTree -nosupport TargetSequences.out.phy > TargetSequences.out.tree
 #NOTE: -nosupport:(we don't want boostrap, as this will cause trouble for further analyses in CodeML).
 
-phyml -i TargetSequences_ALTAN.out.phy -d aa -m JTT -c 4 -a e -b 0
+#Try running phyml -h for all the options
+
+phyml -i TargetSequences.out.phy -d aa -m JTT -c 4 -a e -b 0
 
 #-i = input file
 #-d aa: amino acid sequences
@@ -47,13 +59,19 @@ phyml -i TargetSequences_ALTAN.out.phy -d aa -m JTT -c 4 -a e -b 0
 #-a e: (estimate alpha parameter for the gamma distribution) 
 #-b 0: (we don't want boostrap, as this will cause trouble for further analyses in CodeML).
 
-#Move the tree in a file
-cp TargetSequences_ALTAN.out.phy_phyml_tree TargetSequences_ALTAN.out.tree
+#DNA interleaved sequence file, default parameters :   ./phyml -i seqs1
+#AA interleaved sequence file, default parameters :    ./phyml -i seqs2 -d aa
+#AA sequential sequence file, with customization :     ./phyml -i seqs3 -q -d aa -m JTT -c 4 -a e
 
+
+#Move the tree in a file
+cp TargetSequences.out.phy_phyml_tree TargetSequences.out.tree
+
+#Visual confirm the tree
 #View the tree in NJPlot
 #njplot
 
-#Create a control file for ancestral reconstruction "control_file.ctl" ### SEE ALL THE PARAMETERS THERE N CHANGE ACCORDINGLY ###
+#Create a control file for ancestral reconstruction "${CTRL}" ### SEE ALL THE PARAMETERS THERE N CHANGE ACCORDINGLY ###
 #Explanation of some parameters:
 #runmode = 0 => We provide the tree.
 #clock = 0 => We don't set a molecular clock. We assume that the genes are evolving at different rate.
@@ -67,27 +85,34 @@ cp TargetSequences_ALTAN.out.phy_phyml_tree TargetSequences_ALTAN.out.tree
 
 #You may have to copy the file "jones.dat" from the dat folder in the PAML package, or indicate its location.
 #In BioLinux it is located at /usr/share/paml/dat/jones.dat
-cp /usr/share/paml/dat/jones.dat .
-codeml control_file_ALTAN.ctl
+cp ${JONES} .
+codeml ${CTRL}
 
+#Read more at https://petrov.stanford.edu/software/src/paml3.15/doc/pamlDOC.pdf
 #CodeML will also write into many files, but only two are of interest here:
-#TargetSequences_ALTAN.out.mlc => Contains many information on evolutionary rates.
+#TargetSequences.out.mlc => Contains many information on evolutionary rates.
 #rst => Contains ancestral states for sites and for nodes.
 
 #Extract the sequence in fasta format
-python $scriptLoc/parse_rst.py rst > ancestral_sequences.fasta
+python scriptBase/parse_rst.py rst > ancestral_sequences.fasta
 
 #Compute physico-chemical properties on ancestral sequences.
-#python $scriptLoc/compute_pI.py $inputLoc/TargetSequences_ALTAN.txt
-#python $scriptLoc/compute_pI.py ancestral_sequences.fasta
+#python scriptBase/compute_pI.py ${DIR}/${FASTA}
+#python scriptBase/compute_pI.py ancestral_sequences.fasta
 
 #Map properties on tree.
-#python $scriptLoc/map_on_tree.py ancestral_sequences.fasta TargetSequences_ALTAN.out.tree >  TargetSequences_ALTAN.out_annotated_pI.tree
+#python scriptBase/map_on_tree.py ancestral_sequences.fasta TargetSequences.out.tree >  TargetSequences.out_annotated_pI.tree
 
-mkdir outFiles
-find . -maxdepth 1 \( ! -type d \) -exec sh -c 'mv  "$@" outFiles' _ {} \;
+mkdir ${OUT}
+#find . -maxdepth 1 \( ! -type d \) -exec sh -c 'mv "$@"' OUT} _ {} \;
 
-cp outFiles/*.ctl outFiles/*.sh .
+for file in *; do
+   if ! [ -d "$file" ]; then
+     mv -- "$file" "${OUT}"/
+   fi
+done
+
+cp ${OUT}/*.ctl ${OUT}/*.sh .
 
 
 #You can estimating the stability effect of a mutation with FoldX
