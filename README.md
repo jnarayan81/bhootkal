@@ -15,7 +15,7 @@ bhoot-kal (hindi:भूत-काल; english:preterite; french: le passé simpl
 ### Run
 ```
 ./bhootkal.sh
-./bhootkal.sh -o outFolder -d /home/jitendra/Desktop/testAncestralReco/inFile -f TargetSequences.txt -j /usr/share/paml/dat/jones.dat -c control_file.ctl
+./bhootkal.sh -o outFolder -d /home/jitendra/Desktop/testAncestralReco/inFile -f TargetSequences.out.fasta -j /usr/share/paml/dat/jones.dat -c control_file.ctl
 
 ```
 
