@@ -5,9 +5,9 @@
 
 # Following pre-installed software and tools need to be in yout path
 #-Python2 #Perl5
-#-clustalo -for mutiple alingments 
-#-phyml
-#-codeml
+#-clustalo -for mutiple alingments  # can be replaced with IQ-TREE http://www.iqtree.org/
+#-phyml #Planning to replace it with MACSE https://bioweb.supagro.inra.fr/macse/index.php?menu=releases which is take care of frameshift 
+#-codeml #seems works well
 
 #Perl and Python script location
 #inFile should contain all fasta sequences
@@ -21,18 +21,21 @@ parse_options "${USAGE}" ${@}
 
 #Sequence alignment preparation.
 #Make a multiple alignment, either with Mafft-L-INS-i or Clustal-Omega:
+#There is possibilities to try using IQ-TREE. 
+#IQ-TREE: A fast and effective stochastic algorithm to infer phylogenetic trees by maximum likelihood. IQ-TREE compares favorably to RAxML and PhyML in terms of likelihoods with similar computing time
 #You can opt any other you like, but keep an eye on formating
 #mafft-linsi ${DIR}/${FASTA} > TargetSequences.out.fasta
 
 #Remove the directory if it's present, otherwise do nothing.
 rm -rf ${OUT} ?
 
-#remove special charater from file
+#Remove special charater from file
 #mostly needed when you have your own formated sequences
 sed 's,|,_,g' -i ${DIR}/${FASTA} #fasta #header #sed
 
 #Multiple alignment of all sequences
 #Here I prefer clastal omega for alingments - because it is installed by default in my Os
+# Will update it to use IQ-TREE in future
 clustalo --in ${DIR}/${FASTA} --out TargetSequences.out.fasta
 
 #It is always recommended to check by eye, To view the alignments in jalview
@@ -40,11 +43,12 @@ clustalo --in ${DIR}/${FASTA} --out TargetSequences.out.fasta
 
 #Formating is a mess, why not one format. We need to format the out file for next run.
 #The format of the resulting alignment is FASTA. However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP format.
-#Script adapted from online source @
+#Script adapted from online source @ :) thanks for open source community
 python scriptBase/convert_fasta2phylip.py TargetSequences.out.fasta TargetSequences.out.phy
 
 #As I say, it is upto you to choose
 #generate a tree, either with PhyML (one of the most accurate tool) or FastTree (very fast and pretty accurate):
+# or MACSE (relatively new and accurate) https://bioweb.supagro.inra.fr/macse/index.php?menu=releases
 #FastTree -nosupport TargetSequences.out.phy > TargetSequences.out.tree
 #NOTE: -nosupport:(we don't want boostrap, as this will cause trouble for further analyses in CodeML).
 
@@ -68,7 +72,7 @@ phyml -i TargetSequences.out.phy -d aa -m JTT -c 4 -a e -b 0
 cp TargetSequences.out.phy_phyml_tree TargetSequences.out.tree
 
 #Visual confirm the tree
-#View the tree in NJPlot
+#View the tree in NJPlot or FigTree
 #njplot
 
 #Create a control file for ancestral reconstruction "${CTRL}" ### SEE ALL THE PARAMETERS THERE N CHANGE ACCORDINGLY ###
@@ -97,6 +101,7 @@ codeml ${CTRL}
 python scriptBase/parse_rst.py rst > ancestral_sequences.fasta
 
 #Compute physico-chemical properties on ancestral sequences.
+#Python scripts are adapted from open source community
 #python scriptBase/compute_pI.py ${DIR}/${FASTA}
 #python scriptBase/compute_pI.py ancestral_sequences.fasta
 
